@@ -16,6 +16,7 @@
   font-weight: bold;
   text-decoration: none;
   color: var(--primary);
+  transition: all 0.1s ease-in-out;
 }
 
 .logoLink:hover {
