@@ -7,7 +7,6 @@ export function Cycles() {
   const { state } = useTaskContext();
 
   const cycleStep = Array.from({ length: state.currentCycle });
-  console.log(cycleStep);
 
   const cycleDescriptionsMap = {
     workTime: 'foco',
