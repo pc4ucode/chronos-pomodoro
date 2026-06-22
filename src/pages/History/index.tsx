@@ -5,6 +5,8 @@ import { Heading } from '../../components/Heading';
 import { MainTemplate } from '../../templates/MainTemplate';
 import styles from './styles.module.css';
 import { useTaskContext } from '../../contexts/TaskContext/useTaskContext';
+import { formatDate } from '../../utils/formatDate';
+import { getTaskStatus } from '../../utils/getTaskStatus';
 
 export function History() {
   const { state } = useTaskContext();
@@ -42,8 +44,8 @@ export function History() {
                   <tr key={task.id}>
                     <td>{task.name}</td>
                     <td>{task.duration} min</td>
-                    <td>{new Date(task.startDate).toISOString()}</td>
-                    <td>{task.interruptDate}</td>
+                    <td>{formatDate(task.startDate)}</td>
+                    <td>{getTaskStatus(task, state.activeTask)}</td>
                     <td>{task.type}</td>
                   </tr>
                 );
