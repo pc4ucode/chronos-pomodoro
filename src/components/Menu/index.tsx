@@ -13,10 +13,11 @@ type AvailableThemes = 'dark' | 'light';
 
 export function Menu() {
   const [theme, setTheme] = useState<AvailableThemes>(() => {
-    const storedTheme = localStorage.getItem('theme') as
-      | AvailableThemes
-      | 'dark';
-    return storedTheme;
+    const storedTheme = localStorage.getItem('theme');
+
+    return storedTheme === 'light' || storedTheme === 'dark'
+      ? storedTheme
+      : 'dark';
   });
 
   const nextThemeIcon = {
