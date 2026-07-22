@@ -1,75 +1,59 @@
-# React + TypeScript + Vite
+# Chronos Pomodoro
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+O **Chronos Pomodoro** é uma aplicação de produtividade baseada na Técnica Pomodoro. Ela ajuda a organizar períodos de foco e descanso por meio de um cronômetro com ciclos de trabalho, pausas curtas e pausas longas.
 
-Currently, two official plugins are available:
+🔗 **Acesse a aplicação:** [chronospomodorotimer.netlify.app](https://chronospomodorotimer.netlify.app/)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Funcionalidades
 
-## React Compiler
+- Cronômetro para ciclos de foco e descanso;
+- Tempos de foco, pausa curta e pausa longa personalizáveis;
+- Organização automática dos ciclos;
+- Histórico de tarefas concluídas e interrompidas;
+- Persistência dos dados no navegador;
+- Interface responsiva.
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+## Tecnologias
 
-Note: This will impact Vite dev & build performances.
+- [React](https://react.dev/) e [TypeScript](https://www.typescriptlang.org/);
+- [Vite](https://vite.dev/);
+- [React Router](https://reactrouter.com/);
+- CSS Modules;
+- React Toastify;
+- Lucide React;
+- date-fns;
+- ESLint, Prettier e Husky.
 
-## Expanding the ESLint configuration
+## Como executar
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+É necessário ter o [Node.js](https://nodejs.org/) e o npm instalados.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+```bash
+# Clone o repositório
+git clone https://github.com/pc4ucode/chronos-pomodoro.git
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+# Entre na pasta do projeto
+cd chronos-pomodoro
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# Instale as dependências
+npm install
+
+# Inicie o ambiente de desenvolvimento
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Depois, abra no navegador o endereço exibido pelo Vite no terminal.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Para gerar build, execute:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run build
 ```
+
+## Sobre o projeto
+
+Este é um projeto de aprendizado desenvolvido com base no curso [React JS e Next.js do básico ao avançado](https://www.udemy.com/course/curso-de-reactjs-nextjs-completo-do-basico-ao-avancado/), disponível na Udemy. Seu objetivo é colocar em prática conceitos de React, TypeScript, componentização, gerenciamento de estado, rotas e persistência de dados.
+
+## Aviso
+
+Projeto criado para fins educacionais.
