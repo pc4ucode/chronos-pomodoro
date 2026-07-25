@@ -7,17 +7,17 @@ import { MainTemplate } from '../../templates/MainTemplate';
 import { useRef } from 'react';
 import { useTaskContext } from '../../contexts/TaskContext/useTaskContext';
 import { showMessage } from '../../adapters/showMessage';
+import { TaskActionTypes } from '../../contexts/TaskContext/taskActions';
 
-export function Setting() {
-  const { state } = useTaskContext();
-  const workTimeInput = useRef<HTMLInputElement | null>(null);
-  const shortBreakTimeInput = useRef<HTMLInputElement | null>(null);
-  const longBreakTimeInput = useRef<HTMLInputElement | null>(null);
+export function Settings() {
+  const { state, dispatch } = useTaskContext();
+  const workTimeInput = useRef<HTMLInputElement>(null);
+  const shortBreakTimeInput = useRef<HTMLInputElement>(null);
+  const longBreakTimeInput = useRef<HTMLInputElement>(null);
 
   function handleSaveSettings(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     showMessage.dismiss();
-
     const formErrors = [];
 
     const workTime = Number(workTimeInput.current?.value);
@@ -25,23 +25,19 @@ export function Setting() {
     const longBreakTime = Number(longBreakTimeInput.current?.value);
 
     if (isNaN(workTime) || isNaN(shortBreakTime) || isNaN(longBreakTime)) {
-      formErrors.push('Digite apenas números válidos para todos os campos');
+      formErrors.push('Digite apenas números para TODOS os campos');
     }
 
     if (workTime < 1 || workTime > 99) {
-      formErrors.push('O tempo de foco deve estar entre 1 e 99 minutos');
+      formErrors.push('Digite valores entre 1 e 99 para foco');
     }
 
     if (shortBreakTime < 1 || shortBreakTime > 30) {
-      formErrors.push(
-        'O tempo de descanso curto deve estar entre 1 e 30 minutos',
-      );
+      formErrors.push('Digite valores entre 1 e 30 para descando curto');
     }
 
     if (longBreakTime < 1 || longBreakTime > 60) {
-      formErrors.push(
-        'O tempo de descanso longo deve estar entre 1 e 60 minutos',
-      );
+      formErrors.push('Digite valores entre 1 e 60 para descando longo');
     }
 
     if (formErrors.length > 0) {
@@ -51,22 +47,36 @@ export function Setting() {
       return;
     }
 
-    console.log('Salvar');
+    dispatch({
+      type: TaskActionTypes.CHANGE_SETTINGS,
+      payload: {
+        workTime,
+        shortBreakTime,
+        longBreakTime,
+      },
+    });
+
+    showMessage.success('Configurações salvas');
   }
+
   return (
     <MainTemplate>
-      <Heading>Configurações</Heading>
+      <Container>
+        <Heading>Configurações</Heading>
+      </Container>
+
       <Container>
         <p style={{ textAlign: 'center' }}>
-          Modifique as configurações para tempo de foco,p descanso curso e
-          descanso longo
+          Modifique as configurações para tempo de foco, descanso curso e
+          descanso longo.
         </p>
       </Container>
+
       <Container>
         <form onSubmit={handleSaveSettings} action='' className='form'>
           <div className='formRow'>
             <DefaultInput
-              id='worktime'
+              id='workTime'
               labelText='Foco'
               ref={workTimeInput}
               defaultValue={state.config.workTime}
@@ -76,7 +86,7 @@ export function Setting() {
           <div className='formRow'>
             <DefaultInput
               id='shortBreakTime'
-              labelText='Descanso Curto'
+              labelText='Descanso curto'
               ref={shortBreakTimeInput}
               defaultValue={state.config.shortBreakTime}
               type='number'
@@ -85,7 +95,7 @@ export function Setting() {
           <div className='formRow'>
             <DefaultInput
               id='longBreakTime'
-              labelText='Descanso Longo'
+              labelText='Descanso longo'
               ref={longBreakTimeInput}
               defaultValue={state.config.longBreakTime}
               type='number'
