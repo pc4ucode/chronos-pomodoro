@@ -3,11 +3,13 @@ import { Container } from '../../components/Container';
 import { DefaultButton } from '../../components/DefaultButton';
 import { Heading } from '../../components/Heading';
 import { MainTemplate } from '../../templates/MainTemplate';
+
 import styles from './styles.module.css';
 import { useTaskContext } from '../../contexts/TaskContext/useTaskContext';
 import { formatDate } from '../../utils/formatDate';
 import { getTaskStatus } from '../../utils/getTaskStatus';
-import { sortTasks, type SortTasksOptions } from '../../utils/sortTasks';
+import { sortTasks } from '../../utils/sortTasks';
+import type { SortTasksOptions } from '../../utils/sortTasks';
 import { useEffect, useMemo, useState } from 'react';
 import { showMessage } from '../../adapters/showMessage';
 import { TaskActionTypes } from '../../contexts/TaskContext/taskActions';
@@ -16,31 +18,26 @@ export function History() {
   const { state, dispatch } = useTaskContext();
   const hasTasks = state.tasks.length > 0;
 
-  const [sortTasksOptions, setSortTasksOptions] = useState<
-    Omit<SortTasksOptions, 'tasks'>
+  const [sortTasksOptions, setSortTaskOptions] = useState<
+    Required<Omit<SortTasksOptions, 'tasks'>>
   >({
     field: 'startDate',
     direction: 'desc',
   });
 
-  function handleSortTasks({ field }: Pick<SortTasksOptions, 'field'>) {
-    setSortTasksOptions(prevState => {
-      const newDirection = prevState.direction === 'desc' ? 'asc' : 'desc';
+  const sortedTasks = useMemo(
+    () =>
+      sortTasks({
+        tasks: state.tasks,
+        direction: sortTasksOptions.direction,
+        field: sortTasksOptions.field,
+      }),
+    [sortTasksOptions, state.tasks],
+  );
 
-      return {
-        direction: newDirection,
-        field,
-      };
-    });
-  }
-
-  const sortedTasks = useMemo(() => {
-    return sortTasks({
-      tasks: state.tasks,
-      direction: sortTasksOptions.direction,
-      field: sortTasksOptions.field,
-    });
-  }, [state.tasks, sortTasksOptions.direction, sortTasksOptions.field]);
+  useEffect(() => {
+    document.title = 'Histórico - Chronos Pomodoro';
+  }, []);
 
   useEffect(() => {
     return () => {
@@ -48,16 +45,24 @@ export function History() {
     };
   }, []);
 
+  function handleSortTasks({
+    field,
+  }: Required<Pick<SortTasksOptions, 'field'>>) {
+    const newDirection = sortTasksOptions.direction === 'desc' ? 'asc' : 'desc';
+
+    setSortTaskOptions({
+      direction: newDirection,
+      field,
+    });
+  }
+
   function handleResetHistory() {
     showMessage.dismiss();
-    showMessage.confirm(
-      'Tem certeza que deseja apagar todo o histórico?',
-      confirmation => {
-        if (confirmation) {
-          dispatch({ type: TaskActionTypes.RESET_STATE });
-        }
-      },
-    );
+    showMessage.confirm('Tem certeza?', confirmation => {
+      if (confirmation) {
+        dispatch({ type: TaskActionTypes.RESET_STATE });
+      }
+    });
   }
 
   return (
@@ -78,6 +83,7 @@ export function History() {
           )}
         </Heading>
       </Container>
+
       <Container>
         {hasTasks && (
           <div className={styles.responsiveTable}>
@@ -106,6 +112,7 @@ export function History() {
                   <th>Tipo</th>
                 </tr>
               </thead>
+
               <tbody>
                 {sortedTasks.map(task => {
                   const taskTypeDictionary = {
@@ -117,7 +124,7 @@ export function History() {
                   return (
                     <tr key={task.id}>
                       <td>{task.name}</td>
-                      <td>{task.duration} min</td>
+                      <td>{task.duration}min</td>
                       <td>{formatDate(task.startDate)}</td>
                       <td>{getTaskStatus(task, state.activeTask)}</td>
                       <td>{taskTypeDictionary[task.type]}</td>
@@ -128,12 +135,11 @@ export function History() {
             </table>
           </div>
         )}
+
         {!hasTasks && (
-          <div
-            style={{ textAlign: 'center', padding: '20px', fontWeight: 'bold' }}
-          >
-            <p>Não há tarefas no histórico</p>
-          </div>
+          <p style={{ textAlign: 'center', fontWeight: 'bold' }}>
+            Ainda não existem tarefas criadas.
+          </p>
         )}
       </Container>
     </MainTemplate>
